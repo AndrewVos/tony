@@ -14,23 +14,27 @@ describe Tony::RSpecGenerator do
     Dir.chdir @old_working_directory
   end
 
-  it "has a name" do
-    Tony::RSpecGenerator.new.name.should == "rspec"
+  it "can be executed from the command line" do
+    ARGV = ['rspec']
+    Tony::RSpecGenerator.should_receive(:generate)
+    Tony::generate
+  end
+
+  it "has a title" do
+    Tony::RSpecGenerator.title.should == "rspec"
   end
 
   it "has a description" do
-    Tony::RSpecGenerator.new.description.should == "Generates rspec rake tasks, spec directories and a spec_helper"
+    Tony::RSpecGenerator.description.should == "Generates rspec rake tasks, spec directories and a spec_helper"
   end
 
   it "creates a rake file" do
-    generator = Tony::RSpecGenerator.new
-    generator.generate
+    Tony::RSpecGenerator.generate
     File.exist?(File.join(@test_directory, 'Rakefile')).should == true
   end
 
   it "generates a rake task" do
-    generator = Tony::RSpecGenerator.new
-    generator.generate
+    Tony::RSpecGenerator.generate
     expected_rake_task = File.read(File.join(File.dirname(__FILE__), '../../lib/tony/generators/rspec-rake-task.rb'))
     File.read(File.join(@test_directory, 'Rakefile')).should include expected_rake_task
   end
