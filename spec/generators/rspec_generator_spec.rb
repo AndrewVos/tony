@@ -14,18 +14,18 @@ describe Tony::RSpecGenerator do
     Dir.chdir @old_working_directory
   end
 
-  it "can be executed from the command line" do
-    ARGV = ['rspec']
-    Tony::RSpecGenerator.should_receive(:generate)
-    Tony::generate
-  end
-
   it "has a title" do
     Tony::RSpecGenerator.title.should == "rspec"
   end
 
   it "has a description" do
     Tony::RSpecGenerator.description.should == "Generates rspec rake tasks, spec directories and a spec_helper"
+  end
+
+  it "can be executed from the command line" do
+    ARGV = ['rspec']
+    Tony::RSpecGenerator.should_receive(:generate)
+    Tony::generate
   end
 
   it "creates a rake file" do
