@@ -1,5 +1,4 @@
 require_relative 'helper'
-require 'fileutils'
 
 describe Tony::Generator do
   before :each do
@@ -39,6 +38,21 @@ describe Tony::Generator do
       Tony::Generator.new(test_file) { "line1" }.write
       Tony::Generator.new(test_file) { "line2" }.write
       File.read(test_file).should == "line1\nline2\n"
+    end
+
+    it "outputs information if the file does not exist" do
+      test_file = File.join(@test_directory, 'test.file')
+      generator = Tony::Generator.new(test_file)
+      generator.should_receive(:puts).with("create #{test_file}")
+      generator.write
+    end
+
+    it "outputs information if the file exists" do
+      test_file = File.join(@test_directory, 'test.file')
+      Tony::Generator.new(test_file).write
+      generator = Tony::Generator.new(test_file)
+      generator.should_receive(:puts).with("append #{test_file}")
+      generator.write
     end
   end
 end
