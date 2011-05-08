@@ -10,49 +10,95 @@ describe Tony::Generator do
     FileUtils.rm_rf(@test_directory)
   end
 
-  describe ".write" do
+  it "takes a name" do
+    generator = Tony::Generator.new do |options|
+      options.name = "name"
+    end
+    generator.name.should == "name"
+  end
+
+  it "can be executed from the command line" do
+    ARGV = ['test_generator']
+    generator = Tony::Generator.new do |options|
+      options.name = "test_generator"
+    end
+    Tony::generators << generator
+    generator.should_receive(:generate)
+    Tony::generate
+  end
+  
+  it "takes a description" do
+    generator = Tony::Generator.new do |options|
+      options.description = "description"
+    end
+    generator.description.should == "description"
+  end
+
+  it "takes files" do
+    expected_file_contents = {'file1' => 'file1 contents'}
+    generator = Tony::Generator.new do |options|
+      options.files = expected_file_contents
+    end
+    generator.files.should == expected_file_contents
+  end
+
+  describe ".generate" do
     it "creates files if they don't exist" do
       test_file = File.join(@test_directory, 'test.file')
-      Tony::Generator.new(test_file).write
+      generator = Tony::Generator.new { |options|
+        options.files = {
+          test_file => ''
+        }
+      }.generate
       File.exist?(test_file).should == true
     end
 
     it "creates all directories below the file if they don't exist" do
       non_existent_directory = File.join(@test_directory, 'non_existent_directory')
       test_file = File.join(non_existent_directory, 'test.file')
-      Tony::Generator.new(test_file).write
+      generator = Tony::Generator.new { |options|
+        options.files = {
+          test_file => ''
+        }
+      }.generate
       File.directory?(non_existent_directory).should == true
       File.exist?(test_file).should == true
     end
 
-    it "writes the result of the yield block to the file" do
+    it "writes the specified text to the file" do
       test_file = File.join(@test_directory, 'test.file')
-      Tony::Generator.new(test_file) do
-        "the file contents"
-      end.write
-      File.read(test_file).should == "the file contents\n"
+      file_contents = "this is some text"
+      generator = Tony::Generator.new { |options|
+        options.files = {
+          test_file => file_contents
+        }
+      }.generate
+      File.read(test_file).should == file_contents + "\n"
     end
 
-    it "appends the result of the yield block if the file exists" do
+    it "appends the specified text to the file if it exists" do
       test_file = File.join(@test_directory, 'test.file')
-      Tony::Generator.new(test_file) { "line1" }.write
-      Tony::Generator.new(test_file) { "line2" }.write
-      File.read(test_file).should == "line1\nline2\n"
+      generator = Tony::Generator.new { |options|
+        options.files = {
+          test_file => "hello"
+        }
+      }
+      generator.generate
+      generator.generate
+      File.read(test_file).should == "hello\nhello\n"
     end
 
-    it "outputs information if the file does not exist" do
+    it "outputs information about whether the file was created or appended" do
       test_file = File.join(@test_directory, 'test.file')
-      generator = Tony::Generator.new(test_file)
+      generator = Tony::Generator.new { |options|
+        options.files = {
+          test_file => ''
+        }
+      }
       generator.should_receive(:puts).with("create #{test_file}")
-      generator.write
-    end
-
-    it "outputs information if the file exists" do
-      test_file = File.join(@test_directory, 'test.file')
-      Tony::Generator.new(test_file).write
-      generator = Tony::Generator.new(test_file)
+      generator.generate
       generator.should_receive(:puts).with("append #{test_file}")
-      generator.write
+      generator.generate
     end
   end
 end
