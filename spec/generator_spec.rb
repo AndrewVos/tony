@@ -33,5 +33,12 @@ describe Tony::Generator do
       end.write
       File.read(test_file).should == "the file contents\n"
     end
+
+    it "appends the result of the yield block if the file exists" do
+      test_file = File.join(@test_directory, 'test.file')
+      Tony::Generator.new(test_file) { "line1" }.write
+      Tony::Generator.new(test_file) { "line2" }.write
+      File.read(test_file).should == "line1\nline2\n"
+    end
   end
 end

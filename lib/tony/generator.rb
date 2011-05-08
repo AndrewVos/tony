@@ -7,7 +7,7 @@ module Tony
     def write
       @file_paths.each do |path, block|
         FileUtils.mkdir_p(File.dirname(path))
-        File.open(path, 'w') do |file|
+        File.open(path, 'a') do |file|
           if block != nil
             file.puts block.call
           end
