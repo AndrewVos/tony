@@ -1,3 +1,1 @@
-module Tony
-  # Your code goes here...
-end
+require_relative 'tony/tony'
