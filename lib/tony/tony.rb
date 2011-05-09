@@ -9,7 +9,7 @@ module Tony
     generators.each do |generator|
       used_generators << generator if ARGV.include?(generator.name)
       if generator.combination
-        used_generators << generator if ARGV & generator.combination == generator.combination
+        used_generators << generator if (ARGV - generator.combination).size == (ARGV.size - generator.combination.size)
       end
     end
     used_generators
