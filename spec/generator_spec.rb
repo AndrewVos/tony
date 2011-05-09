@@ -17,6 +17,13 @@ describe Tony::Generator do
     generator.name.should == "name"
   end
 
+  it "takes a combination" do
+    generator = Tony::Generator.new do |options|
+      options.combination = ['generator1', 'generator2']
+    end
+    generator.combination.should == ['generator1', 'generator2']
+  end
+
   it "stores gems" do
     generator = Tony::Generator.new do |options|
       options.gems = ["rspec", "sinatra"]

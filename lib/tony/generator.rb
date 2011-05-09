@@ -2,7 +2,8 @@ require 'fileutils'
 
 module Tony
   class Generator
-    attr_accessor :name, :description, :files, :gems
+    attr_accessor :name, :description, :files, :gems, :combination
+
     def initialize(&block)
       yield self
     end

@@ -5,7 +5,14 @@ module Tony
   end
   
   def self.used_generators
-    generators.select { |g| ARGV.include?(g.name) }
+    used_generators = []
+    generators.each do |generator|
+      used_generators << generator if ARGV.include?(generator.name)
+      if generator.combination
+        used_generators << generator if ARGV & generator.combination == generator.combination
+      end
+    end
+    used_generators
   end
 
   def self.generate

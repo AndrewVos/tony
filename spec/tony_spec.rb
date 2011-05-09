@@ -1,21 +1,33 @@
 require_relative 'helper'
 
 describe Tony do
-  before :each do
-    @test_generator = mock
-    @test_generator.stub!(:generate)
-    Tony.stub!(:generators).and_return([@test_generator])
+  def mock_generator(name, combination = nil)
+    mock_generator = mock
+    mock_generator.stub!(:name).and_return(name)
+    mock_generator.stub!(:combination).and_return(combination)
+    mock_generator
   end
 
   it "stores a list of used generators" do
-    ARGV = ['test_generator']
-    @test_generator.stub!(:name).and_return('test_generator')
-    Tony.used_generators.should == [@test_generator]
+    ARGV = ['generator']
+    generator = mock_generator('generator')
+    Tony.stub!(:generators).and_return([generator])
+    Tony.used_generators.should == [generator]
+  end
+
+  it "stores a list of combination generators if all combinations are used" do
+    ARGV = ['generator1', 'generator2']
+    generator1 = mock_generator('generator1')
+    generator2 = mock_generator('generator2')
+    combination_generator = mock_generator('combination_generator', ['generator1', 'generator2'])
+    Tony.stub!(:generators).and_return([generator1, generator2, combination_generator])
+    Tony.used_generators.should == [generator1, generator2, combination_generator]
   end
 
   it "sends generate to all generators" do
-    Tony.stub(:used_generators).and_return([@test_generator])
-    @test_generator.should_receive(:generate).once
+    generator = mock_generator('test_generator')
+    Tony.stub(:used_generators).and_return([generator])
+    generator.should_receive(:generate).once
     Tony.generate
   end
 end
