@@ -1,16 +1,10 @@
-require 'ostruct'
 require 'fileutils'
 
 module Tony
   class Generator
-    attr_reader :name, :description, :files, :gems
+    attr_accessor :name, :description, :files, :gems
     def initialize(&block)
-      options = OpenStruct.new
-      yield options
-      @name = options.name
-      @description = options.description
-      @files = options.files
-      @gems = options.gems
+      yield self
     end
 
     def generate
