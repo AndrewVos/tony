@@ -1,6 +1,7 @@
-require_relative 'tony/tony'
-require_relative 'tony/generator'
-require_relative 'tony/generators/rspec/rspec_generator'
-require_relative 'tony/generators/sinatra/sinatra_generator'
-require_relative 'tony/generators/heroku/heroku_generator'
-require_relative 'tony/generators/sinatra_rspec/sinatra_rspec_generator'
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), 'tony'))
+require 'tony'
+require 'generator'
+
+Dir.glob(File.join(File.dirname(__FILE__), '**/*_generator.rb')).each do |generator|
+  require generator
+end
