@@ -3,10 +3,14 @@ module Tony
     @@generators = [] unless defined? @@generators
     @@generators
   end
+  
+  def self.used_generators
+    generators.select { |g| ARGV.include?(g.name) }
+  end
+
   def self.generate
-    ARGV.each do |argument|
-      generator = generators.find { |g| g.name == argument }
-      generator.generate
+    used_generators.each do |used_generator|
+      used_generator.generate
     end
   end
 end

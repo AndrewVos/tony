@@ -24,16 +24,6 @@ describe Tony::Generator do
     generator.gems.should == ["rspec", "sinatra"]
   end
 
-  it "can be executed from the command line" do
-    ARGV = ['test_generator']
-    generator = Tony::Generator.new do |options|
-      options.name = "test_generator"
-    end
-    Tony::generators << generator
-    generator.should_receive(:generate)
-    Tony::generate
-  end
-  
   it "takes a description" do
     generator = Tony::Generator.new do |options|
       options.description = "description"
