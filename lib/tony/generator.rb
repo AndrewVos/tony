@@ -3,13 +3,14 @@ require 'fileutils'
 
 module Tony
   class Generator
-    attr_reader :name, :description, :files
+    attr_reader :name, :description, :files, :gems
     def initialize(&block)
       options = OpenStruct.new
       yield options
       @name = options.name
       @description = options.description
       @files = options.files
+      @gems = options.gems
     end
 
     def generate

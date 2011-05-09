@@ -17,6 +17,13 @@ describe Tony::Generator do
     generator.name.should == "name"
   end
 
+  it "stores gems" do
+    generator = Tony::Generator.new do |options|
+      options.gems = ["rspec", "sinatra"]
+    end
+    generator.gems.should == ["rspec", "sinatra"]
+  end
+
   it "can be executed from the command line" do
     ARGV = ['test_generator']
     generator = Tony::Generator.new do |options|
