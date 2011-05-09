@@ -13,4 +13,5 @@ Tony::generators << Tony::Generator.new do |options|
   ].each do |path|
     options.files[path] = File.read(File.join(File.dirname(__FILE__), path))
   end
+  options.gems = ['sinatra']
 end
