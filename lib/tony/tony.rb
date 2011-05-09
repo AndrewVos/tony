@@ -16,6 +16,12 @@ module Tony
   end
 
   def self.generate
+    if ARGV.size == 0
+      puts 'Supported Generators'
+      generators.each do |generator|
+        puts generator.name
+      end
+    end
     used_generators.each do |used_generator|
       used_generator.generate
     end
