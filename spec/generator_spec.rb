@@ -47,62 +47,50 @@ describe Tony::Generator do
   end
 
   describe ".generate" do
-    it "creates files if they don't exist" do
-      test_file = File.join(@test_directory, 'test.file')
-      generator = Tony::Generator.new { |options|
+    before :each do
+      @test_file = File.join(@test_directory, 'test.file')
+      @generator = Tony::Generator.new { |options|
         options.files = {
-          test_file => ''
+          @test_file => ''
         }
-      }.generate
-      File.exist?(test_file).should == true
+      }
+      @generator.stub!(:puts)
+    end
+    it "creates files if they don't exist" do
+      @generator.generate
+      File.exist?(@test_file).should == true
     end
 
     it "creates all directories below the file if they don't exist" do
       non_existent_directory = File.join(@test_directory, 'non_existent_directory')
-      test_file = File.join(non_existent_directory, 'test.file')
-      generator = Tony::Generator.new { |options|
-        options.files = {
-          test_file => ''
-        }
-      }.generate
+      @test_file = File.join(non_existent_directory, 'test.file')
+      @generator.files[@test_file] = ''
+      @generator.generate
       File.directory?(non_existent_directory).should == true
-      File.exist?(test_file).should == true
+      File.exist?(@test_file).should == true
     end
 
     it "writes the specified text to the file" do
-      test_file = File.join(@test_directory, 'test.file')
       file_contents = "this is some text"
-      generator = Tony::Generator.new { |options|
-        options.files = {
-          test_file => file_contents
-        }
-      }.generate
-      File.read(test_file).should == file_contents + "\n"
+      @generator.files[@test_file] = file_contents
+      @generator.generate
+      File.read(@test_file).should == file_contents + "\n"
     end
 
     it "appends the specified text to the file if it exists" do
       test_file = File.join(@test_directory, 'test.file')
-      generator = Tony::Generator.new { |options|
-        options.files = {
-          test_file => "hello"
-        }
-      }
-      generator.generate
-      generator.generate
-      File.read(test_file).should == "hello\nhello\n"
+      @generator.files[@test_file] = 'hello'
+      @generator.generate
+      @generator.generate
+      File.read(@test_file).should == "hello\nhello\n"
     end
 
     it "outputs information about whether the file was created or appended" do
-      test_file = File.join(@test_directory, 'test.file')
-      generator = Tony::Generator.new { |options|
-        options.files = {
-          test_file => ''
-        }
-      }
-      generator.should_receive(:puts).with("create #{test_file}")
-      generator.generate
-      generator.should_receive(:puts).with("append #{test_file}")
-      generator.generate
+      @test_file = File.join(@test_directory, 'test.file')
+      @generator.should_receive(:puts).with("create #{@test_file}")
+      @generator.generate
+      @generator.should_receive(:puts).with("append #{@test_file}")
+      @generator.generate
     end
   end
 end
