@@ -19,7 +19,12 @@ module Tony
     if ARGV.size == 0
       puts 'Supported Generators'
       generators.each do |generator|
-        puts generator.name
+        puts generator.name unless generator.combination
+      end
+      puts
+      puts 'Combination Generators'
+      generators.each do |generator|
+        puts generator.name if generator.combination
       end
     end
     used_generators.each do |used_generator|

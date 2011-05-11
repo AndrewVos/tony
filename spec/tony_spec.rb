@@ -31,12 +31,16 @@ describe Tony do
     Tony.generate
   end
 
-  it "outputs a list of generators if there are no arguments" do
+  it "outputs a list of generators" do
     ARGV = []
     generator = mock_generator('generator')
-    Tony.stub!(:generators).and_return([generator])
-    Tony.should_receive(:puts).with('Supported Generators')
-    Tony.should_receive(:puts).with('generator')
+    combination_generator = mock_generator('combination generator', ['generator'])
+    Tony.stub!(:generators).and_return([generator, combination_generator])
+    Tony.should_receive(:puts).with('Supported Generators').ordered
+    Tony.should_receive(:puts).with('generator').ordered
+    Tony.should_receive(:puts).ordered
+    Tony.should_receive(:puts).with('Combination Generators').ordered
+    Tony.should_receive(:puts).with('combination generator').ordered
     Tony.generate
   end
 end
