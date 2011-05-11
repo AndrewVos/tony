@@ -11,6 +11,7 @@ gem install tony
 
 Usage
 -----
+
 ```
 $ tony
 Supported Generators
