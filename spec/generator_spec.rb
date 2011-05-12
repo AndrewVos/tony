@@ -24,13 +24,6 @@ describe Tony::Generator do
     generator.combination.should == ['generator1', 'generator2']
   end
 
-  it "stores gems" do
-    generator = Tony::Generator.new do |options|
-      options.gems = ["rspec", "sinatra"]
-    end
-    generator.gems.should == ["rspec", "sinatra"]
-  end
-
   it "takes a description" do
     generator = Tony::Generator.new do |options|
       options.description = "description"
