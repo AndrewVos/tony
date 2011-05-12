@@ -8,15 +8,22 @@ describe Tony do
     mock_generator
   end
 
+  def setup_arguments(arguments)
+    ARGV.clear
+    arguments.each do |argument|
+      ARGV.push(argument)
+    end
+  end
+
   it "stores a list of used generators" do
-    ARGV = ['generator']
+    setup_arguments(['generator'])
     generator = mock_generator('generator')
     Tony.stub!(:generators).and_return([generator])
     Tony.used_generators.should == [generator]
   end
 
   it "stores a list of combination generators if all combinations are used" do
-    ARGV = ['generator1', 'generator2']
+    setup_arguments(['generator1', 'generator2'])
     generator1 = mock_generator('generator1')
     generator2 = mock_generator('generator2')
     combination_generator = mock_generator('combination_generator', ['generator1', 'generator2'])
@@ -32,7 +39,7 @@ describe Tony do
   end
 
   it "outputs a list of generators" do
-    ARGV = []
+    setup_arguments([])
     generator = mock_generator('generator')
     combination_generator = mock_generator('combination generator', ['generator'])
     Tony.stub!(:generators).and_return([generator, combination_generator])
