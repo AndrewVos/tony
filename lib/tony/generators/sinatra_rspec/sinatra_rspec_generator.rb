@@ -1,5 +1,5 @@
 Tony::generators << Tony::Generator.new do |options|
-  options.name = "sinatra and rspec"
+  options.name = "sinatra & rspec"
   options.description = "sinatra and rspec"
   options.combination = ["sinatra", "rspec"]
   options.files = {
