@@ -1,5 +1,6 @@
 tony
 ====
+[![Build Status](http://travis-ci.org/AndrewVos/tony.png)](http://travis-ci.org/AndrewVos/tony)
 
 tony is a generator for ruby projects.
 
