@@ -3,7 +3,7 @@ module Tony
     @@generators = [] unless defined? @@generators
     @@generators
   end
-  
+
   def self.used_generators
     used_generators = []
     generators.each do |generator|
